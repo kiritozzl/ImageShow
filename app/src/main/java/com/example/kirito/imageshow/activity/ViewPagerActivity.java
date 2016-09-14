@@ -1,5 +1,7 @@
 package com.example.kirito.imageshow.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -9,6 +11,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.kirito.imageshow.R;
 import com.example.kirito.imageshow.entity.Item;
@@ -37,6 +41,24 @@ public class ViewPagerActivity extends AppCompatActivity {
         PagersAdapter adapter = new PagersAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(id);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.picture,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.share){
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            //intent.setDataAndType(Uri.parse(items.get(id).getPath()),"image/*");
+            intent.setType("image/*");
+            intent.putExtra(Intent.EXTRA_STREAM,Uri.parse(items.get(id).getPath()));
+            startActivity(Intent.createChooser(intent,"share image"));
+        }
+        return true;
     }
 
     private class PagersAdapter extends FragmentStatePagerAdapter{

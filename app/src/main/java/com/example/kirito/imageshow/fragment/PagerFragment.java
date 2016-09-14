@@ -75,7 +75,6 @@ public class PagerFragment extends Fragment implements View.OnTouchListener{
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         // handle touch events here
-        Log.e(TAG, "onTouch: ---");
         ImageView view = (ImageView) v;
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
