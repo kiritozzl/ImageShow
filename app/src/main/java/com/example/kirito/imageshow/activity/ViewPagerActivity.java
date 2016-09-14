@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 
 import com.example.kirito.imageshow.R;
 import com.example.kirito.imageshow.entity.Item;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by kirito on 2016/9/12.
  */
-public class ViewPagerActivity extends FragmentActivity {
+public class ViewPagerActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private int id;
     private int count;
