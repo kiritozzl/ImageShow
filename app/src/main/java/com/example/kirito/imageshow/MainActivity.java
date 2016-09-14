@@ -5,9 +5,12 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.PopupMenu;
 
 import com.example.kirito.imageshow.activity.PictureActivity;
 import com.example.kirito.imageshow.activity.ViewPagerActivity;
@@ -62,4 +65,28 @@ public class MainActivity extends AppCompatActivity {
         });
         load.execute(sd_path);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.more){
+            View view = findViewById(R.id.more);
+            PopupMenu popupMenu = new PopupMenu(MainActivity.this,view);
+            popupMenu.getMenuInflater().inflate(R.menu.popup,popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    return false;
+                }
+            });
+            popupMenu.show();
+        }
+        return true;
+    }
+
 }
