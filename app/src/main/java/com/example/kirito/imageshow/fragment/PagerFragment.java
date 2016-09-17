@@ -76,6 +76,7 @@ public class PagerFragment extends Fragment implements View.OnTouchListener{
     public boolean onTouch(View v, MotionEvent event) {
         // handle touch events here
         ImageView view = (ImageView) v;
+
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
                 savedMatrix.set(matrix);
@@ -85,6 +86,7 @@ public class PagerFragment extends Fragment implements View.OnTouchListener{
                 //Log.e(TAG, "onTouch: down---" );
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
+
                 oldDist = spacing(event);
                 if (oldDist > 10f) {
                     savedMatrix.set(matrix);
@@ -112,6 +114,8 @@ public class PagerFragment extends Fragment implements View.OnTouchListener{
                     float dy = event.getY() - start.y;
                     matrix.postTranslate(dx, dy);
                 } else if (mode == ZOOM) {
+                    //解决一开始设定scaletype 为matrix ，图片最初显示会变形的问题
+                    view.setScaleType(ImageView.ScaleType.MATRIX);
                     float newDist = spacing(event);
                     if (newDist > 10f) {
                         matrix.set(savedMatrix);
@@ -134,7 +138,6 @@ public class PagerFragment extends Fragment implements View.OnTouchListener{
                 //Log.e(TAG, "onTouch: move---" );
                 break;
         }
-
         view.setImageMatrix(matrix);
         return true;
     }

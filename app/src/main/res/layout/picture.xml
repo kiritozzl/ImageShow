@@ -5,7 +5,7 @@
 <!--通过设定matrix来缩放图片，这个设定是关键-android:scaleType="matrix"-->
     <ImageView
         android:id="@+id/iv_picture"
-        android:scaleType="matrix"
+        android:scaleType="fitCenter"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
