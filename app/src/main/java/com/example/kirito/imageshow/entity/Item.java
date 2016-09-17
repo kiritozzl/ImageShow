@@ -11,6 +11,43 @@ public class Item implements Serializable{
     private String size;
     private int id;
 
+    private int rescourse;
+    private int count;
+    private String date;
+    private String file_name;
+
+    public String getFile_name() {
+        return file_name;
+    }
+
+    public void setFile_name(String file_name) {
+        this.file_name = file_name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public int getRescourse() {
+        return rescourse;
+    }
+
+    public void setRescourse(int rescourse) {
+        this.rescourse = rescourse;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     public int getId() {
         return id;
     }

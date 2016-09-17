@@ -18,8 +18,13 @@
 
         <activity android:name=".activity.PictureActivity"/>
         <activity android:name=".activity.ViewPagerActivity"/>
+        <activity android:name=".activity.ListModeActivity"/>
+        <activity android:name=".activity.ListToGridActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
 </manifest>

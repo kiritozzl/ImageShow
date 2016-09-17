@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/camera"
+        android:title="camera"
+        android:icon="@drawable/camera"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/more"
         android:title="mode"
         android:icon="@drawable/more"

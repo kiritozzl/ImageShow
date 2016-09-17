@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.kirito.imageshow.entity.FileItem;
 import com.example.kirito.imageshow.entity.Item;
 
 import java.io.File;
@@ -15,9 +16,12 @@ import java.util.List;
  */
 public class LoadImages extends AsyncTask<String,Void,Void>{
     private CallBack callBack;
+    private ListView listView;
     private ShowProgress dialog;
+    private int mode;
 
-    public LoadImages(Context context) {
+    public LoadImages(Context context,int mode) {
+        this.mode = mode;
         dialog = new ShowProgress(context);
     }
 
@@ -29,9 +33,16 @@ public class LoadImages extends AsyncTask<String,Void,Void>{
 
     @Override
     protected Void doInBackground(String... params) {
-        List<Item> itemList = new OpenImages().openImage(params[0]);
-        if (callBack != null){
-            callBack.setListItem(itemList);
+        if (mode == 0){
+            List<Item> itemList = new OpenImages().openImage(params[0]);
+            if (callBack != null){
+                callBack.setListItem(itemList);
+            }
+        }else if (mode == 1){
+            List<FileItem> items = new OpenImages().openFileImages(params[0]);
+            if (listView != null){
+                listView.setListFileItem(items);
+            }
         }
         return null;
     }
@@ -40,6 +51,14 @@ public class LoadImages extends AsyncTask<String,Void,Void>{
     protected void onPostExecute(Void mVoid) {
         super.onPostExecute(mVoid);
         dialog.dismiss();
+    }
+
+    public interface ListView{
+        void setListFileItem(List<FileItem> listFileItem);
+    }
+
+    public void setListListView(ListView listView){
+        this.listView = listView;
     }
 
     public void setCallBack(CallBack callBack){

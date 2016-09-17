@@ -1,24 +1,25 @@
-package com.example.kirito.imageshow;
+package com.example.kirito.imageshow.activity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.ListPopupWindow;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.RadioButton;
+import android.widget.ListView;
 
-import com.example.kirito.imageshow.activity.ListModeActivity;
-import com.example.kirito.imageshow.activity.ViewPagerActivity;
+import com.example.kirito.imageshow.MainActivity;
+import com.example.kirito.imageshow.R;
 import com.example.kirito.imageshow.adapter.GridViewAdapter;
+import com.example.kirito.imageshow.adapter.ListViewAdapter;
 import com.example.kirito.imageshow.adapter.PopupAdapter;
+import com.example.kirito.imageshow.entity.FileItem;
 import com.example.kirito.imageshow.entity.Item;
 import com.example.kirito.imageshow.support.LoadImages;
 
@@ -29,44 +30,39 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by kirito on 2016/9/16.
+ */
+public class ListModeActivity extends AppCompatActivity {
     private String sd_path;
-    private GridView gv;
+    private ListView lv;
+    private List<FileItem> items;
     private String current_photo_path;
     ListPopupWindow popup;
 
-    private static final String TAG = "MainActivity";
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.listmode);
 
+        lv = (ListView) findViewById(R.id.lv);
         sd_path = Environment.getExternalStorageDirectory().getAbsolutePath();
-        gv = (GridView) findViewById(R.id.gv);
-        LoadImages load = new LoadImages(this,0);
-        load.setCallBack(new LoadImages.CallBack() {
+        LoadImages load = new LoadImages(this,1);
+        load.setListListView(new LoadImages.ListView() {
             @Override
-            public void setListItem(final List<Item> listItem) {
+            public void setListFileItem(final List<FileItem> listFileItem) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        GridViewAdapter adapter = new GridViewAdapter(MainActivity.this,listItem);
-                        gv.setAdapter(adapter);
-                        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        ListViewAdapter adapter = new ListViewAdapter(ListModeActivity.this,listFileItem);
+                        lv.setAdapter(adapter);
+                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Item item = (Item) parent.getItemAtPosition(position);
-                                //Log.e(TAG, "onItemClick: path---"+item.getPath() );
-                                Intent intent = new Intent(MainActivity.this, ViewPagerActivity.class);
-                                intent.putExtra("id",position);
-                                intent.putExtra("count",listItem.size());
+                                FileItem fileItem = (FileItem) parent.getItemAtPosition(position);
+                                Intent intent = new Intent(ListModeActivity.this, ListToGridActivity.class);
+                                intent.putExtra("path",fileItem.getParent_path());
 
-                                //传递ArrayList<Item>
-                                ArrayList<Item> items = (ArrayList<Item>) listItem;
-                                Bundle args = new Bundle();
-                                args.putSerializable("items",items);
-                                intent.putExtra("bundle",args);
                                 startActivity(intent);
                             }
                         });
@@ -106,15 +102,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setListPopupWindow(View view){
-        popup = new ListPopupWindow(MainActivity.this);
-        PopupAdapter adpter = new PopupAdapter(MainActivity.this,0, new PopupAdapter.onCheckListener() {
+        popup = new ListPopupWindow(ListModeActivity.this);
+        PopupAdapter adpter = new PopupAdapter(ListModeActivity.this,1, new PopupAdapter.onCheckListener() {
             @Override
             public void onChecked(int id) {
                 //Log.e(TAG, "onChecked: mode---"+mode );
-                if (id == 1){
-                    Intent i = new Intent(MainActivity.this,ListModeActivity.class);
+                if (id == 0){
+                    Intent i = new Intent(ListModeActivity.this,MainActivity.class);
                     startActivity(i);
-                    //MainActivity.this.finish();
+                    //ListModeActivity.this.finish();
                 }
             }
         });
@@ -172,5 +168,4 @@ public class MainActivity extends AppCompatActivity {
         //Log.e(TAG, "createImageFile: current_photo_path---"+current_photo_path );
         return image;
     }
-
 }
