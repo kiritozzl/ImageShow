@@ -9,6 +9,12 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/delete_menu"
+        android:icon="@drawable/trash"
+        android:title="delete"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/more"
         android:title="mode"
         android:icon="@drawable/more"

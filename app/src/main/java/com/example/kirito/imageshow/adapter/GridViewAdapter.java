@@ -76,14 +76,15 @@ public class GridViewAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (!isChecked){
                     holder.iv_check.setImageResource(R.drawable.checked);
-                    if (listener != null){
-                        listener.setCheck(true);
-                    }
                     isChecked = true;
                 }else if (isChecked){
                     //设置imageview内容为空
                     holder.iv_check.setImageResource(android.R.color.transparent);
                     isChecked = false;
+                }
+
+                if (listener != null){
+                    listener.setCheck(isChecked);
                 }
             }
         });

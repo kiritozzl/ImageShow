@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private GridView gv;
     private String current_photo_path;
     ListPopupWindow popup;
-
-    private boolean isCheck = false;
+    private Menu menu;
 
     private static final String TAG = "MainActivity";
 
@@ -57,7 +56,11 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void setCheck(boolean check) {
                                 Log.e(TAG, "setCheck: check---"+check );
-                                isCheck = check;
+                                if (check){
+                                    showMenuItem();
+                                }else if (!check){
+                                    hideMenuItem();
+                                }
                             }
                         });
                         gv.setAdapter(adapter);
@@ -87,16 +90,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.main,menu);
+        hideMenuItem();
         return true;
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        if (isCheck){
-            menu.add(0,1,Menu.NONE,"delete").setIcon(R.drawable.trash);
-        }
-        return super.onPrepareOptionsMenu(menu);
+    //解决动态在gridview显示menu item的问题
+    private void showMenuItem(){
+        MenuItem item = menu.findItem(R.id.delete_menu);
+        item.setVisible(true);
+    }
+
+    private void hideMenuItem(){
+        MenuItem item = menu.findItem(R.id.delete_menu);
+        item.setVisible(false);
     }
 
     @Override
