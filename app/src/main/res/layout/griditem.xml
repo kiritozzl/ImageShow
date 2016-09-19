@@ -10,11 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/grid_iv"
-            android:scaleType="centerCrop"
-            android:layout_width="150dp"
-            android:layout_height="150dp" />
+        <!--为了达到图片叠加的效果，LinearLayout下嵌套FrameLayout-->
+        <FrameLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/grid_iv"
+                android:scaleType="centerCrop"
+                android:layout_width="150dp"
+                android:layout_height="150dp" />
+
+            <ImageView
+                android:id="@+id/check"
+                android:layout_gravity="right"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+
+        </FrameLayout>
+
+
     </LinearLayout>
 
 </FrameLayout>

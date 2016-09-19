@@ -2,10 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <item
-        android:id="@+id/grid_item"
-        android:title="grid mode"/>
+        android:id="@+id/del_item"
+        android:title="Delete"/>
 
-    <item
-        android:id="@+id/file_item"
-        android:title="file mode"/>
 </menu>

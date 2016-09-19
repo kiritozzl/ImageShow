@@ -21,12 +21,20 @@ import java.util.List;
 public class GridViewAdapter extends BaseAdapter {
     private Context context;
     private List<Item> itemList;
+    private boolean isChecked = false;
+    private checkListener listener;
 
     private static final String TAG = "GridViewAdapter";
 
     public GridViewAdapter(Context context, List<Item> itemList) {
         this.context = context;
         this.itemList = itemList;
+    }
+
+    public GridViewAdapter(Context context, List<Item> itemList, checkListener listener) {
+        this.context = context;
+        this.itemList = itemList;
+        this.listener = listener;
     }
 
     @Override
@@ -46,11 +54,12 @@ public class GridViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        viewHolder holder;
+        final viewHolder holder;
         if (convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.griditem,null);
             holder = new viewHolder();
             holder.iv = (ImageView) convertView.findViewById(R.id.grid_iv);
+            holder.iv_check = (ImageView) convertView.findViewById(R.id.check);
             convertView.setTag(holder);
         }else {
             holder = (viewHolder) convertView.getTag();
@@ -62,10 +71,35 @@ public class GridViewAdapter extends BaseAdapter {
                 .resize(150,150)
                 .centerCrop()
                 .into(holder.iv);
+        holder.iv_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isChecked){
+                    holder.iv_check.setImageResource(R.drawable.checked);
+                    if (listener != null){
+                        listener.setCheck(true);
+                    }
+                    isChecked = true;
+                }else if (isChecked){
+                    //设置imageview内容为空
+                    holder.iv_check.setImageResource(android.R.color.transparent);
+                    isChecked = false;
+                }
+            }
+        });
         return convertView;
     }
 
     class viewHolder{
         ImageView iv;
+        ImageView iv_check;
+    }
+
+    public void setCheckListener(checkListener listener){
+        this.listener = listener;
+    }
+
+    public interface checkListener{
+        void setCheck(boolean check);
     }
 }

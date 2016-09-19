@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private String current_photo_path;
     ListPopupWindow popup;
 
+    private boolean isCheck = false;
+
     private static final String TAG = "MainActivity";
 
     @Override
@@ -51,7 +53,13 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        GridViewAdapter adapter = new GridViewAdapter(MainActivity.this,listItem);
+                        GridViewAdapter adapter = new GridViewAdapter(MainActivity.this, listItem, new GridViewAdapter.checkListener() {
+                            @Override
+                            public void setCheck(boolean check) {
+                                Log.e(TAG, "setCheck: check---"+check );
+                                isCheck = check;
+                            }
+                        });
                         gv.setAdapter(adapter);
                         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
@@ -84,21 +92,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (isCheck){
+            menu.add(0,1,Menu.NONE,"delete").setIcon(R.drawable.trash);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.more){
             View view = findViewById(R.id.more);
             setListPopupWindow(view);
-            /*PopupMenu popupMenu = new PopupMenu(MainActivity.this,view);
-            popupMenu.getMenuInflater().inflate(R.menu.popup,popupMenu.getMenu());
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    if (item.getItemId() == R.id.grid_item){
-                    }
-                    return true;
-                }
-            });
-            popupMenu.show();*/
+
         }else if (item.getItemId() == R.id.camera){
             takePhoto();
         }

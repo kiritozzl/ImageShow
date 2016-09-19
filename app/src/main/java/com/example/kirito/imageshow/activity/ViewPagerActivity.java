@@ -13,11 +13,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
 
 import com.example.kirito.imageshow.R;
 import com.example.kirito.imageshow.entity.Item;
 import com.example.kirito.imageshow.fragment.PagerFragment;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +31,9 @@ public class ViewPagerActivity extends AppCompatActivity {
     private int id;
     private int count;
     private ArrayList<Item> items;
+    private PagersAdapter adapter;
+
+    private File file;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +44,9 @@ public class ViewPagerActivity extends AppCompatActivity {
         id = getIntent().getIntExtra("id",0);
         count = getIntent().getIntExtra("count",0);
         items = (ArrayList<Item>) getIntent().getBundleExtra("bundle").getSerializable("items");
-        PagersAdapter adapter = new PagersAdapter(getSupportFragmentManager());
+
+        file = new File(items.get(id).getPath());
+        adapter = new PagersAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(id);
     }
@@ -57,6 +65,20 @@ public class ViewPagerActivity extends AppCompatActivity {
             intent.setType("image/*");
             intent.putExtra(Intent.EXTRA_STREAM,Uri.parse(items.get(id).getPath()));
             startActivity(Intent.createChooser(intent,"share image"));
+        }else if (item.getItemId() == R.id.delete_menu){
+            View view = findViewById(R.id.delete_menu);
+            PopupMenu popupMenu = new PopupMenu(ViewPagerActivity.this,view);
+            popupMenu.getMenuInflater().inflate(R.menu.popup,popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    file.delete();
+                    viewPager.setCurrentItem(id + 1);
+                    adapter.notifyDataSetChanged();
+                    return true;
+                }
+            });
+            popupMenu.show();
         }
         return true;
     }
