@@ -66,15 +66,15 @@ public class ViewPagerActivity extends AppCompatActivity {
             intent.putExtra(Intent.EXTRA_STREAM,Uri.parse(items.get(id).getPath()));
             startActivity(Intent.createChooser(intent,"share image"));
         }else if (item.getItemId() == R.id.delete_menu){
-            View view = findViewById(R.id.delete_menu);
+            final View view = findViewById(R.id.delete_menu);
             PopupMenu popupMenu = new PopupMenu(ViewPagerActivity.this,view);
             popupMenu.getMenuInflater().inflate(R.menu.popup,popupMenu.getMenu());
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     file.delete();
+                    viewPager.removeViewAt(id);
                     viewPager.setCurrentItem(id + 1);
-                    adapter.notifyDataSetChanged();
                     return true;
                 }
             });

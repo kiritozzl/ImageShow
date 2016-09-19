@@ -76,6 +76,8 @@ public class ListModeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main,menu);
+        MenuItem menuItem = menu.findItem(R.id.delete_menu);
+        menuItem.setVisible(false);
         return true;
     }
 

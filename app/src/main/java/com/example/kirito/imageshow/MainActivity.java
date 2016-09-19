@@ -1,5 +1,7 @@
 package com.example.kirito.imageshow;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -35,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private String current_photo_path;
     ListPopupWindow popup;
     private Menu menu;
+    private GridViewAdapter adapter;
+
+    private AlertDialog.Builder builder;
+    private List<String> dele_path;
 
     private static final String TAG = "MainActivity";
 
@@ -45,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         sd_path = Environment.getExternalStorageDirectory().getAbsolutePath();
         gv = (GridView) findViewById(R.id.gv);
+        loadData();
+    }
+
+    private void loadData(){
         LoadImages load = new LoadImages(this,0);
         load.setCallBack(new LoadImages.CallBack() {
             @Override
@@ -52,14 +62,18 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        GridViewAdapter adapter = new GridViewAdapter(MainActivity.this, listItem, new GridViewAdapter.checkListener() {
+                        adapter = new GridViewAdapter(MainActivity.this, listItem, new GridViewAdapter.checkListener() {
                             @Override
-                            public void setCheck(boolean check) {
-                                Log.e(TAG, "setCheck: check---"+check );
+                            public void setCheck(boolean check,List<String> path) {
+                                //Log.e(TAG, "setCheck: check---"+check );
                                 if (check){
                                     showMenuItem();
                                 }else if (!check){
                                     hideMenuItem();
+                                }
+
+                                if (path != null){
+                                    dele_path = path;
                                 }
                             }
                         });
@@ -107,14 +121,39 @@ public class MainActivity extends AppCompatActivity {
         item.setVisible(false);
     }
 
+    private void setDialog(){
+        builder = new AlertDialog.Builder(MainActivity.this).setTitle("删除图片")
+                .setMessage("你确定删除所选的图片吗？").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        File file = null;
+                        for (String ph : dele_path){
+                            //Log.e(TAG, "onClick: ph---"+ph );
+                            file = new File(ph);
+                            file.delete();
+                            hideMenuItem();
+                        }
+                        loadData();
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        hideMenuItem();
+                    }
+                });
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.more){
             View view = findViewById(R.id.more);
             setListPopupWindow(view);
-
         }else if (item.getItemId() == R.id.camera){
             takePhoto();
+        }else if (item.getItemId() == R.id.delete_menu){
+            setDialog();
+            builder.show();
         }
         return true;
     }

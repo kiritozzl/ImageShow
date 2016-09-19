@@ -35,6 +35,7 @@ public class OpenImages {
                 if (name.endsWith(".jpeg") || name.endsWith("jpg")
                         || name.endsWith("png") || name.endsWith("gif")){
                     Item item = new Item();
+                    //过滤小文件
                     if ((f.length() / 1024) <= 40){
                         continue;
                     }
@@ -65,6 +66,11 @@ public class OpenImages {
 
                 if (name.endsWith(".jpeg") || name.endsWith("jpg")
                         || name.endsWith("png") || name.endsWith("gif")){
+
+                    if ((file.length() / 1024) <= 40){
+                        continue;
+                    }
+
                     if (i == 1){
                         FileItem fileitem = new FileItem();
                         File parent = file.getParentFile();

@@ -13,6 +13,7 @@ import com.example.kirito.imageshow.R;
 import com.example.kirito.imageshow.entity.Item;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class GridViewAdapter extends BaseAdapter {
     private List<Item> itemList;
     private boolean isChecked = false;
     private checkListener listener;
+    private List<String> dele_path;
 
     private static final String TAG = "GridViewAdapter";
 
@@ -35,6 +37,7 @@ public class GridViewAdapter extends BaseAdapter {
         this.context = context;
         this.itemList = itemList;
         this.listener = listener;
+        dele_path = new ArrayList<String>();
     }
 
     @Override
@@ -53,7 +56,7 @@ public class GridViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final viewHolder holder;
         if (convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.griditem,null);
@@ -64,7 +67,7 @@ public class GridViewAdapter extends BaseAdapter {
         }else {
             holder = (viewHolder) convertView.getTag();
         }
-        Item item = itemList.get(position);
+        final Item item = itemList.get(position);
         //Log.e(TAG, "getView: path---"+"file://"+item.getPath() );
         //加载缩略图（小图片）不会内存溢出
         Picasso.with(context).load("file://"+item.getPath())
@@ -74,17 +77,21 @@ public class GridViewAdapter extends BaseAdapter {
         holder.iv_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (!isChecked){
                     holder.iv_check.setImageResource(R.drawable.checked);
+                    dele_path.add(item.getPath());
+                    Log.e(TAG, "onClick: item path---"+item.getPath() );
                     isChecked = true;
                 }else if (isChecked){
                     //设置imageview内容为空
                     holder.iv_check.setImageResource(android.R.color.transparent);
+                    dele_path.remove(item.getPath());
                     isChecked = false;
                 }
 
                 if (listener != null){
-                    listener.setCheck(isChecked);
+                    listener.setCheck(isChecked,dele_path);
                 }
             }
         });
@@ -101,6 +108,6 @@ public class GridViewAdapter extends BaseAdapter {
     }
 
     public interface checkListener{
-        void setCheck(boolean check);
+        void setCheck(boolean check, List<String> path);
     }
 }
